@@ -1,0 +1,72 @@
+package net.minecraft.client.gui;
+
+import net.minecraft.client.resources.*;
+import java.util.*;
+
+public class GuiYesNo extends GuiScreen
+{
+    protected GuiYesNoCallback field_146355_a;
+    protected String field_146351_f;
+    private String field_146354_r;
+    protected String field_146352_g;
+    protected String field_146356_h;
+    protected int field_146357_i;
+    private int field_146353_s;
+    private static final String __OBFID = "CL_00000684";
+    
+    public GuiYesNo(final GuiYesNoCallback p_i1082_1_, final String p_i1082_2_, final String p_i1082_3_, final int p_i1082_4_) {
+        this.field_146355_a = p_i1082_1_;
+        this.field_146351_f = p_i1082_2_;
+        this.field_146354_r = p_i1082_3_;
+        this.field_146357_i = p_i1082_4_;
+        this.field_146352_g = I18n.format("gui.yes", new Object[0]);
+        this.field_146356_h = I18n.format("gui.no", new Object[0]);
+    }
+    
+    public GuiYesNo(final GuiYesNoCallback p_i1083_1_, final String p_i1083_2_, final String p_i1083_3_, final String p_i1083_4_, final String p_i1083_5_, final int p_i1083_6_) {
+        this.field_146355_a = p_i1083_1_;
+        this.field_146351_f = p_i1083_2_;
+        this.field_146354_r = p_i1083_3_;
+        this.field_146352_g = p_i1083_4_;
+        this.field_146356_h = p_i1083_5_;
+        this.field_146357_i = p_i1083_6_;
+    }
+    
+    @Override
+    public void initGui() {
+        this.buttonList.add(new GuiOptionButton(0, this.width / 2 - 155, this.height / 6 + 96, this.field_146352_g));
+        this.buttonList.add(new GuiOptionButton(1, this.width / 2 - 155 + 160, this.height / 6 + 96, this.field_146356_h));
+    }
+    
+    @Override
+    protected void actionPerformed(final GuiButton p_146284_1_) {
+        this.field_146355_a.confirmClicked(p_146284_1_.id == 0, this.field_146357_i);
+    }
+    
+    @Override
+    public void drawScreen(final int p_73863_1_, final int p_73863_2_, final float p_73863_3_) {
+        this.drawDefaultBackground();
+        this.drawCenteredString(this.fontRendererObj, this.field_146351_f, this.width / 2, 70, 16777215);
+        this.drawCenteredString(this.fontRendererObj, this.field_146354_r, this.width / 2, 90, 16777215);
+        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+    }
+    
+    public void func_146350_a(final int p_146350_1_) {
+        this.field_146353_s = p_146350_1_;
+        for (final GuiButton var3 : this.buttonList) {
+            var3.enabled = false;
+        }
+    }
+    
+    @Override
+    public void updateScreen() {
+        super.updateScreen();
+        final int field_146353_s = this.field_146353_s - 1;
+        this.field_146353_s = field_146353_s;
+        if (field_146353_s == 0) {
+            for (final GuiButton var2 : this.buttonList) {
+                var2.enabled = true;
+            }
+        }
+    }
+}

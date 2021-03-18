@@ -1,0 +1,63 @@
+package net.minecraft.world.gen.feature;
+
+import net.minecraft.block.*;
+import net.minecraft.world.*;
+import java.util.*;
+import net.minecraft.init.*;
+import net.minecraft.block.material.*;
+
+public class WorldGenLiquids extends WorldGenerator
+{
+    private Block field_150521_a;
+    private static final String __OBFID = "CL_00000434";
+    
+    public WorldGenLiquids(final Block p_i45465_1_) {
+        this.field_150521_a = p_i45465_1_;
+    }
+    
+    @Override
+    public boolean generate(final World p_76484_1_, final Random p_76484_2_, final int p_76484_3_, final int p_76484_4_, final int p_76484_5_) {
+        if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_ + 1, p_76484_5_) != Blocks.stone) {
+            return false;
+        }
+        if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_ - 1, p_76484_5_) != Blocks.stone) {
+            return false;
+        }
+        if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_).getMaterial() != Material.air && p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_) != Blocks.stone) {
+            return false;
+        }
+        int var6 = 0;
+        if (p_76484_1_.getBlock(p_76484_3_ - 1, p_76484_4_, p_76484_5_) == Blocks.stone) {
+            ++var6;
+        }
+        if (p_76484_1_.getBlock(p_76484_3_ + 1, p_76484_4_, p_76484_5_) == Blocks.stone) {
+            ++var6;
+        }
+        if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_ - 1) == Blocks.stone) {
+            ++var6;
+        }
+        if (p_76484_1_.getBlock(p_76484_3_, p_76484_4_, p_76484_5_ + 1) == Blocks.stone) {
+            ++var6;
+        }
+        int var7 = 0;
+        if (p_76484_1_.isAirBlock(p_76484_3_ - 1, p_76484_4_, p_76484_5_)) {
+            ++var7;
+        }
+        if (p_76484_1_.isAirBlock(p_76484_3_ + 1, p_76484_4_, p_76484_5_)) {
+            ++var7;
+        }
+        if (p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_, p_76484_5_ - 1)) {
+            ++var7;
+        }
+        if (p_76484_1_.isAirBlock(p_76484_3_, p_76484_4_, p_76484_5_ + 1)) {
+            ++var7;
+        }
+        if (var6 == 3 && var7 == 1) {
+            p_76484_1_.setBlock(p_76484_3_, p_76484_4_, p_76484_5_, this.field_150521_a, 0, 2);
+            p_76484_1_.scheduledUpdatesAreImmediate = true;
+            this.field_150521_a.updateTick(p_76484_1_, p_76484_3_, p_76484_4_, p_76484_5_, p_76484_2_);
+            p_76484_1_.scheduledUpdatesAreImmediate = false;
+        }
+        return true;
+    }
+}

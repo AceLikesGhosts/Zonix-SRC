@@ -1,0 +1,122 @@
+package net.minecraft.block;
+
+import net.minecraft.block.material.*;
+import net.minecraft.world.*;
+import net.minecraft.util.*;
+import net.minecraft.init.*;
+import java.util.*;
+import net.minecraft.entity.*;
+import net.minecraft.entity.player.*;
+import net.minecraft.item.*;
+import net.minecraft.client.renderer.texture.*;
+
+public class BlockFarmland extends Block
+{
+    private IIcon field_149824_a;
+    private IIcon field_149823_b;
+    private static final String __OBFID = "CL_00000241";
+    
+    protected BlockFarmland() {
+        super(Material.ground);
+        this.setTickRandomly(true);
+        this.setBlockBounds(0.0f, 0.0f, 0.0f, 1.0f, 0.9375f, 1.0f);
+        this.setLightOpacity(255);
+    }
+    
+    @Override
+    public AxisAlignedBB getCollisionBoundingBoxFromPool(final World p_149668_1_, final int p_149668_2_, final int p_149668_3_, final int p_149668_4_) {
+        return AxisAlignedBB.getBoundingBox(p_149668_2_ + 0, p_149668_3_ + 0, p_149668_4_ + 0, p_149668_2_ + 1, p_149668_3_ + 1, p_149668_4_ + 1);
+    }
+    
+    @Override
+    public boolean isOpaqueCube() {
+        return false;
+    }
+    
+    @Override
+    public boolean renderAsNormalBlock() {
+        return false;
+    }
+    
+    @Override
+    public IIcon getIcon(final int p_149691_1_, final int p_149691_2_) {
+        return (p_149691_1_ == 1) ? ((p_149691_2_ > 0) ? this.field_149824_a : this.field_149823_b) : Blocks.dirt.getBlockTextureFromSide(p_149691_1_);
+    }
+    
+    @Override
+    public void updateTick(final World p_149674_1_, final int p_149674_2_, final int p_149674_3_, final int p_149674_4_, final Random p_149674_5_) {
+        if (!this.func_149821_m(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_) && !p_149674_1_.canLightningStrikeAt(p_149674_2_, p_149674_3_ + 1, p_149674_4_)) {
+            final int var6 = p_149674_1_.getBlockMetadata(p_149674_2_, p_149674_3_, p_149674_4_);
+            if (var6 > 0) {
+                p_149674_1_.setBlockMetadataWithNotify(p_149674_2_, p_149674_3_, p_149674_4_, var6 - 1, 2);
+            }
+            else if (!this.func_149822_e(p_149674_1_, p_149674_2_, p_149674_3_, p_149674_4_)) {
+                p_149674_1_.setBlock(p_149674_2_, p_149674_3_, p_149674_4_, Blocks.dirt);
+            }
+        }
+        else {
+            p_149674_1_.setBlockMetadataWithNotify(p_149674_2_, p_149674_3_, p_149674_4_, 7, 2);
+        }
+    }
+    
+    @Override
+    public void onFallenUpon(final World p_149746_1_, final int p_149746_2_, final int p_149746_3_, final int p_149746_4_, final Entity p_149746_5_, final float p_149746_6_) {
+        if (!p_149746_1_.isClient && p_149746_1_.rand.nextFloat() < p_149746_6_ - 0.5f) {
+            if (!(p_149746_5_ instanceof EntityPlayer) && !p_149746_1_.getGameRules().getGameRuleBooleanValue("mobGriefing")) {
+                return;
+            }
+            p_149746_1_.setBlock(p_149746_2_, p_149746_3_, p_149746_4_, Blocks.dirt);
+        }
+    }
+    
+    private boolean func_149822_e(final World p_149822_1_, final int p_149822_2_, final int p_149822_3_, final int p_149822_4_) {
+        final byte var5 = 0;
+        for (int var6 = p_149822_2_ - var5; var6 <= p_149822_2_ + var5; ++var6) {
+            for (int var7 = p_149822_4_ - var5; var7 <= p_149822_4_ + var5; ++var7) {
+                final Block var8 = p_149822_1_.getBlock(var6, p_149822_3_ + 1, var7);
+                if (var8 == Blocks.wheat || var8 == Blocks.melon_stem || var8 == Blocks.pumpkin_stem || var8 == Blocks.potatoes || var8 == Blocks.carrots) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+    
+    private boolean func_149821_m(final World p_149821_1_, final int p_149821_2_, final int p_149821_3_, final int p_149821_4_) {
+        for (int var5 = p_149821_2_ - 4; var5 <= p_149821_2_ + 4; ++var5) {
+            for (int var6 = p_149821_3_; var6 <= p_149821_3_ + 1; ++var6) {
+                for (int var7 = p_149821_4_ - 4; var7 <= p_149821_4_ + 4; ++var7) {
+                    if (p_149821_1_.getBlock(var5, var6, var7).getMaterial() == Material.water) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
+    }
+    
+    @Override
+    public void onNeighborBlockChange(final World p_149695_1_, final int p_149695_2_, final int p_149695_3_, final int p_149695_4_, final Block p_149695_5_) {
+        super.onNeighborBlockChange(p_149695_1_, p_149695_2_, p_149695_3_, p_149695_4_, p_149695_5_);
+        final Material var6 = p_149695_1_.getBlock(p_149695_2_, p_149695_3_ + 1, p_149695_4_).getMaterial();
+        if (var6.isSolid()) {
+            p_149695_1_.setBlock(p_149695_2_, p_149695_3_, p_149695_4_, Blocks.dirt);
+        }
+    }
+    
+    @Override
+    public Item getItemDropped(final int p_149650_1_, final Random p_149650_2_, final int p_149650_3_) {
+        return Blocks.dirt.getItemDropped(0, p_149650_2_, p_149650_3_);
+    }
+    
+    @Override
+    public Item getItem(final World p_149694_1_, final int p_149694_2_, final int p_149694_3_, final int p_149694_4_) {
+        return Item.getItemFromBlock(Blocks.dirt);
+    }
+    
+    @Override
+    public void registerBlockIcons(final IIconRegister p_149651_1_) {
+        this.field_149824_a = p_149651_1_.registerIcon(this.getTextureName() + "_wet");
+        this.field_149823_b = p_149651_1_.registerIcon(this.getTextureName() + "_dry");
+    }
+}

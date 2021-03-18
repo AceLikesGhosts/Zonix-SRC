@@ -1,0 +1,52 @@
+package net.minecraft.client.gui;
+
+import net.minecraft.util.*;
+import net.minecraft.client.resources.*;
+import java.util.*;
+
+public class GuiDisconnected extends GuiScreen
+{
+    private String field_146306_a;
+    private IChatComponent field_146304_f;
+    private List field_146305_g;
+    private final GuiScreen field_146307_h;
+    private static final String __OBFID = "CL_00000693";
+    
+    public GuiDisconnected(final GuiScreen p_i45020_1_, final String p_i45020_2_, final IChatComponent p_i45020_3_) {
+        this.field_146307_h = p_i45020_1_;
+        this.field_146306_a = I18n.format(p_i45020_2_, new Object[0]);
+        this.field_146304_f = p_i45020_3_;
+    }
+    
+    @Override
+    protected void keyTyped(final char p_73869_1_, final int p_73869_2_) {
+    }
+    
+    @Override
+    public void initGui() {
+        this.buttonList.clear();
+        this.buttonList.add(new GuiButton(0, this.width / 2 - 100, this.height / 4 + 120 + 12, I18n.format("gui.toMenu", new Object[0])));
+        this.field_146305_g = this.fontRendererObj.listFormattedStringToWidth(this.field_146304_f.getFormattedText(), this.width - 50);
+    }
+    
+    @Override
+    protected void actionPerformed(final GuiButton p_146284_1_) {
+        if (p_146284_1_.id == 0) {
+            this.mc.displayGuiScreen(this.field_146307_h);
+        }
+    }
+    
+    @Override
+    public void drawScreen(final int p_73863_1_, final int p_73863_2_, final float p_73863_3_) {
+        this.drawDefaultBackground();
+        this.drawCenteredString(this.fontRendererObj, this.field_146306_a, this.width / 2, this.height / 2 - 50, 11184810);
+        int var4 = this.height / 2 - 30;
+        if (this.field_146305_g != null) {
+            for (final String var6 : this.field_146305_g) {
+                this.drawCenteredString(this.fontRendererObj, var6, this.width / 2, var4, 16777215);
+                var4 += this.fontRendererObj.FONT_HEIGHT;
+            }
+        }
+        super.drawScreen(p_73863_1_, p_73863_2_, p_73863_3_);
+    }
+}
